@@ -22,14 +22,15 @@ from hdmf.utils import docval
 from pynwb import load_namespaces, register_class
 from pynwb.file import MultiContainerInterface, NWBContainer, NWBDataInterface
 
-from filterframework_to_nwb.create_franklab_spec import ns_path as fl_ns_path
+from filterframework_to_nwb.create_franklab_spec import namespace_path
 
 # ------------------------------------------------
 # Load the Frank Lab behavioral extensions
-# See 'create_franklab_spec.ipynb' for details on the generation of the spec file.
+# See 'create_franklab_spec.ipynb' for details on the generation of the spec
+# file.
 # ------------------------------------------------
 
-load_namespaces(fl_ns_path)
+load_namespaces(namespace_path)
 
 # ------------------------------------------------
 # Python classes implementing 'franklab_apparatus.extensions.yaml'
