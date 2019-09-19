@@ -17,13 +17,13 @@ import filterframework_to_nwb.fl_extension_helpers as flh
 import filterframework_to_nwb.nspike_helpers as ns
 
 # Recording parameters needed for import:
-eeg_samprate = 1500.0  # Hz
+LFP_SAMPLING_RATE = 1500.0  # Hz
 
 # Conversion: data are in uV, divide by 1e6 to get to volts:
-uV_to_V = 1.0 / 1e6
+MICROVOLTS_TO_VOLTS = 1.0 / 1e6
 
 # Nspike time conversion
-NSpike_timestamps_per_sec = 10000
+NSPIKE_TIMESTAMPS_PER_SECOND = 10000
 
 logger = getLogger(__name__)
 
@@ -125,7 +125,7 @@ def write_ephys(nwbf, data_dir, animal_prefix, day, recording_device):
         # Parse the LFP from Frank Lab Matlab files. timestamps and data will
         # be lists of times / data points, one list per epoch
         timestamps[tet_num], data[tet_num] = ns.build_day_eeg(
-            eeg_files[day][tet_num], eeg_samprate)
+            eeg_files[day][tet_num], LFP_SAMPLING_RATE)
 
     # put all of the LFP data on a common time base by truncating and
     # interpolating where necessary
@@ -154,7 +154,8 @@ def write_ephys(nwbf, data_dir, animal_prefix, day, recording_device):
     final_data = np.zeros((len(timestamps.keys()), 0), np.int16)
 
     for epoch in range(num_epochs):
-        times = np.arange(start_time[epoch], end_time[epoch], 1 / eeg_samprate)
+        times = np.arange(start_time[epoch],
+                          end_time[epoch], 1 / LFP_SAMPLING_RATE)
         # this allows for sample times past end_time[epoch], so we need to
         # test for that and delete the final element in that case
         if times[-1] > end_time[epoch]:
@@ -173,7 +174,7 @@ def write_ephys(nwbf, data_dir, animal_prefix, day, recording_device):
     # Add LFP as a new ElectricalSeries in the ecephys.LFP object
     lfp.create_electrical_series(name=lfp_name,
                                  data=final_data,
-                                 conversion=uV_to_V,
+                                 conversion=MICROVOLTS_TO_VOLTS,
                                  electrodes=lfp_electrode_table_region,
                                  timestamps=final_times)
 
@@ -222,7 +223,7 @@ def write_ephys(nwbf, data_dir, animal_prefix, day, recording_device):
                 for epoch_obs_int in cluster_spikes[epoch]['timerange']:
                     # Convert from Nspike timestamps to POSIX time
                     epoch_obs_int = (epoch_obs_int.T.astype(
-                        float) / NSpike_timestamps_per_sec +
+                        float) / NSPIKE_TIMESTAMPS_PER_SECOND +
                         nwbf.session_start_time.timestamp())
                     obs_int_each_epoch = np.append(
                         obs_int_each_epoch, [epoch_obs_int], axis=0)
