@@ -244,7 +244,7 @@ def write_ephys(nwbf, data_dir, animal_prefix, day, recording_device):
             cluster_id += 1
 
 
-def write_behav(nwbf, data_dir, animal_prefix, day):
+def write_behavior(nwbf, data_dir, animal_prefix, day):
     # write position, head_direction, speed, linear position and apparatus
     # information
 
@@ -561,7 +561,7 @@ def convert_to_nwb(data_dir, nwb_dir, animal_prefix, animal_name, days,
         write_ephys(nwbf, data_dir, animal_prefix, day, recording_device)
 
         # Behavioral data
-        write_behav(nwbf, data_dir, animal_prefix, day)
+        write_behavior(nwbf, data_dir, animal_prefix, day)
 
         with pynwb.NWBHDF5IO(nwb_file_name, mode='w') as iow:
             iow.write(nwbf)
