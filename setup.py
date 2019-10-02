@@ -25,7 +25,7 @@ setuptools.setup(
     description=DESCRIPTION,
     long_description=long_description,
     long_description_content_type="text/markdown",
-    url="https://github.com/edeno/filterframework_to_nwb",
+    url="https://github.com/LorenFrankLab/filterframework_to_nwb",
     packages=setuptools.find_packages(),
     package_data={'filterframework_to_nwb': ["*.yaml"]},
     install_requires=INSTALL_REQUIRES,
