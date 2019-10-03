@@ -29,7 +29,17 @@ logger = getLogger(__name__)
 
 
 def write_ephys(nwbf, data_dir, animal_prefix, day, recording_device):
-    # create the ElectrodeGroups, Electrodes, Unit and LFP data structures
+    '''create the ElectrodeGroups, Electrodes, Unit and LFP data structures
+
+    Parameters
+    ----------
+    nwbf : pynwb.NWBFile instance
+    data_dir : str
+    animal_prefix : str
+    day : int
+    recording_device : str
+
+    '''
 
     # Parse tetrodes metadata from the  Frank Lab Matlab files
     tetrode_metadata = ns.parse_franklab_tetrodes(data_dir, animal_prefix, day)
