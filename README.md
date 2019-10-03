@@ -1,2 +1,2 @@
 # filterframework_to_nwb
- Converts from Frank Lab Filterframework DataFormat to Neurodata Without Border 2.0
+ Converts from Frank Lab Filterframework DataFormat to Neurodata Without Borders 2.0
