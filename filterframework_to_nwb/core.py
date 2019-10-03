@@ -499,11 +499,6 @@ def write_behavior(nwbf, data_dir, animal_prefix, day):
                        tags=epoch_tags)
 
 
-"""
-Main conversion function
-"""
-
-
 def convert_to_nwb(data_dir, nwb_dir, animal_prefix, animal_name, days,
                    overwrite=False,
                    dataset_zero_time=datetime(
@@ -544,7 +539,7 @@ def convert_to_nwb(data_dir, nwb_dir, animal_prefix, animal_name, days,
         # open the file
         nwbf = pynwb.NWBFile(
             session_description=session_description,
-            identifier='{0}{1:04}'.format(animal_prefix, day),
+            identifier=f'{animal_prefix}{day:04}',
             session_start_time=dataset_zero_time,
             file_create_date=datetime.now(tz.tzlocal()),
             lab='Frank Laboratory',
