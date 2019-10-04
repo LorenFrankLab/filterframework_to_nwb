@@ -3,10 +3,12 @@ channels:
 - defaults
 - conda-forge
 - anaconda
+- franklab
 dependencies:
 - "python >= 3.6"
 - pynwb
 - hdmf
+- franklab_nwb_extensions
 - pandas
 - networkx
 - matplotlib

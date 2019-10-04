@@ -10,11 +10,11 @@ import pynwb
 import scipy.interpolate as interpolate
 from dateutil import tz
 
-# Frank Lab PyNWB extensions and extension-related helpers
-import filterframework_to_nwb.fl_extension as fle
 import filterframework_to_nwb.fl_extension_helpers as flh
-# Helpers for parsing Frank Lab Matlab data
+# # Helpers for parsing Frank Lab Matlab data
 import filterframework_to_nwb.nspike_helpers as ns
+# Frank Lab PyNWB extensions and extension-related helpers
+import franklab_nwb_extensions.fl_extension as fle
 
 # Recording parameters needed for import:
 LFP_SAMPLING_RATE = 1500.0  # Hz

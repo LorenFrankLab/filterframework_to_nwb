@@ -10,6 +10,7 @@ INSTALL_REQUIRES = [
     'scipy',
     'python-dateutil',
     'python-intervals',
+    'franklab_nwb_extensions'
 ]
 TESTS_REQUIRE = ['pytest >= 2.7.1']
 DESCRIPTION = "Convert files from Loren Frank Lab old matlab format to NWB 2.0"
