@@ -1,47 +1,32 @@
-# ------------------------------------------------
-#        FRANK LAB NWB -- HELPER FUNCTIONS
-# ------------------------------------------------
-#  Overview:
-#     The following functions assist in parsing old Frank Lab data using the
-#     Frank Lab NWB extensions (franklab.extensions.yaml) for representing
-#     aspects of the data that are not easily stored in vanilla NWB (e.g. Behavioral apparatus/track
-#     geometries). There are also some functions for working between with Network X graphs and
-#     Frank Lab Apparatus geometries. See the headers below for a rough organization.
-#
-#     See nspike_helpers.py for general helper functions for parsing Frank Lab filter
-#     framework data.
-# ------------------------------------------------
-# ------------------------------------------------
+'''The following functions assist in parsing old Frank Lab data using the
+Frank Lab NWB extensions (franklab.extensions.yaml) for representing
+aspects of the data that are not easily stored in vanilla NWB (e.g. Behavioral
+apparatus/track geometries).
+'''
 
 
 import filterframework_to_nwb.nspike_helpers as ns
 from franklab_nwb_extensions.fl_extension import (Apparatus, Edge, PointNode,
                                                   PolygonNode, SegmentNode)
 
-# eventually replace calls to Node (below), etc with fle.Node, ...
 
+def get_apparatus_from_linpos(linpos_this_epoch, name='some apparatus',
+                              conversion=1.0):
+    '''Make an Apparatus object representing a linearized apparatus.
 
-# ------------------------------------------------
-#     Frank Lab Apparatus Extension Helpers
-# ------------------------------------------------
+    Parameters
+    ----------
+    linpos_this_epoch : dict
+    name : str, optional
+        Name of apparatus
+    conversion : float
+        Conversion factor to multiply linpos coordinates (i.e. for converting
+        pixels to meters)
 
-def get_apparatus_from_linpos(linpos_this_epoch, name='some apparatus', conversion=1.0):
-    '''
-    Purpose:
-        Make an Apparatus object representing a linearized apparatus from animal Bon data
-        extracted from Frank Lab Filter Framework. This method might not work for all
-        Frank Lab Filter Framework data. In particular, publicly available CRCNS data
-        do not contain linpos data at all.
+    Returns
+    --------
+    appar : Apparatus
 
-    Arguments:
-        linpos_this_epoch (dict): Data extracted from Frank Lab Filter Framework linpos
-            for this epoch (see convert_nspike.ipynb)
-        name (str)[optional]: name of this apparatus
-        conversion (float): conversion factor to multiply linpos coordinates
-                            (i.e. for converting pixels to meters)
-
-    Returns:
-        appar (Apparatus): Apparatus object representing the linearized apparatus
     '''
     # Dummy Apparatus for epochs without one
     if not linpos_this_epoch:
@@ -75,21 +60,26 @@ def get_apparatus_from_linpos(linpos_this_epoch, name='some apparatus', conversi
 
 
 def get_franklab_apparatus(epoch_metadata, behav_mod):
-    '''
-    Purpose:
-        Get the Frank Lab Apparatus object for a particular epoch. Note that all of the
-        Apparatus objects must already be created and added to the ProcessingModule 'behav_mod'
-        that is passed into this function. This function is useful when iteratively processing
-        each epoch of data and mapping it onto one of a subset of pre-defined apparatuses.
-    Arguments:
-        epoch_metadata: the metadata dictionary from a particular epoch of the Filter Framework 'task' data.
-            The 'task' data returned from 'nspike_helpers.parse_franklab_task_data()' is a dictionary
-            keyed by epoch number. Each of these entries is itself a dictionary containing data specifically
-            for that epoch, including metadata about the apparatus the animal was on.
-        behav_mod (PyNWB ProcessingModule): a PyNWB ProcessingModule containing all of the Frank Lab Apparatus
-            objects. This is where we will look to find the appropriate apparatus for this epoch.
-    Returns:
-        appar (Apparatus): Frank Lab Apparatus (franklab.extensions.yaml) for this epoch
+    '''Get the Frank Lab Apparatus object for a particular epoch.
+
+    Note that all of the Apparatus objects must already be created and added to
+    the ProcessingModule `behav_mod` that is passed into this function. This
+    function is useful when iteratively processing each epoch of data and\
+    mapping it onto one of a subset of pre-defined apparatuses.
+
+    Parameters
+    ----------
+    epoch_metadata: dict
+        The metadata dictionary from a particular epoch of the
+        Filter Framework 'task' data.
+    behav_mod : pynwb.ProcessingModule
+        Contains all of the Frank Lab Apparatus objects. This is where we will
+        look to find the appropriate apparatus for this epoch.
+
+    Returns
+    ------
+    appar : Apparatus
+        Frank Lab Apparatus (franklab.extensions.yaml) for this epoch
 
     '''
     # Extract 'type' and 'environment' from the parsed Matlab data
@@ -111,21 +101,26 @@ def get_franklab_apparatus(epoch_metadata, behav_mod):
 
 
 def get_franklab_task(epoch_metadata, task_mod):
-    '''
-    Purpose:
-        Get the Frank Lab Task object for a particular epoch. Note that all of the
-        Task objects must already be created and added to the ProcessingModule 'behav_mod'
-        that is passed into this function. This function is useful when iteratively processing
-        each epoch of data and mapping it onto one of a subset of pre-defined Tasks.
-    Arguments:
-        epoch_metadata: the metadata dictionary from a particular epoch of the Filter Framework 'task' data.
-            The 'task' data returned from 'nspike_helpers.parse_franklab_task_data()' is a dictionary
-            keyed by epoch number. Each of these entries is itself a dictionary containing data specifically
-            for that epoch, including metadata about the task the animal was doing.
-        behav_mod (PyNWB ProcessingModule): a PyNWB ProcessingModule containing all of the Frank Lab Task
-            objects. This is where we will look to find the appropriate Task for this epoch.
-    Returns:
-        (Task): Frank Lab Task (franklab.extensions.yaml) for this epoch
+    '''Get the Frank Lab Task object for a particular epoch.
+
+    Note that all of the Task objects must already be created and added to the
+    ProcessingModule `behav_mod` that is passed into this function.
+    This function is useful when iteratively processing each epoch of data and
+    mapping it onto one of a subset of pre-defined Tasks.
+
+    Parameters
+    ----------
+    epoch_metadata: dict
+        The metadata dictionary from a particular epoch of the
+        Filter Framework 'task' data.
+    behav_mod : pynwb.ProcessingModule
+        Contains all of the Frank Lab Apparatus objects. This is where we will
+        look to find the appropriate apparatus for this epoch.
+
+    Returns
+    -------
+    task : Task
+        Frank Lab Task (franklab.extensions.yaml) for this epoch
 
     '''
     # Extract epoch 'type' from the parsed Matlab data
@@ -143,25 +138,33 @@ def get_franklab_task(epoch_metadata, task_mod):
 
 
 def get_franklab_nodes(points, segments, polygons):
-    '''
-    Purpose:
-        Create a list of Frank Lab PointNode, SegmentNode, and PolygonNode objects, given a set of
-        Python dictionaries where each entry represents the geometrical coordinates of a single point,
-        segment, or polygon that we want to make a Node for.
-    Arguments:
-        points (dict): dictionary where each key is the name of a point, and each value is a 1x2 list
-            with the x/y coordinates of the point
-        segments (dict): dictionary where each key is the name of a segement, and each value is a 2x2 list
-            with the x/y coordinates of the start and end point of the segment
-        polygons (dict): dictionary where each key is the name of a polygon, and each value is a nx2 list
-            with the x/y coordinates of the vertices in the polygon
-    Returns:
-        nodes (list): list of Frank Lab PointNode, SegmentNode, and PolygonNode objects
+    '''Create a list of Frank Lab PointNode, SegmentNode, and PolygonNode
+    objects, given a set of Python dictionaries where each entry represents the
+    geometrical coordinates of a single point, segment, or polygon that we want
+    to make a Node for.
+
+    Parameters
+    ----------
+    points :  dict
+        Each key is the name of a point, and each value is a 1x2 list with the
+        xy coordinates of the point.
+    segments :  dict
+        Each key is the name of a segement, and each value is a 2x2 list
+        with the xy coordinates of the start and end point of the segment
+    polygons : dict
+        Each key is the name of a polygon, and each value is a nx2 list
+        with the xy coordinates of the vertices in the polygon
+
+    Returns
+    -------
+    nodes : list
+        Frank Lab PointNode, SegmentNode, and PolygonNode objects
 
     '''
     nodes = []
     for name, point in points.items():
-        # wrap [x,y] point in a list so all apparatus coords (point, segment, or polygon) are nested lists
+        # wrap [x,y] point in a list so all apparatus coords (point, segment,
+        # or polygon) are nested lists
         nodes.append(PointNode(name=name, coords=[point]))
     for name, segment in segments.items():
         nodes.append(SegmentNode(name=name, coords=segment))
@@ -172,17 +175,24 @@ def get_franklab_nodes(points, segments, polygons):
 
 
 def separate_epochs_by_apparatus(data_dir, animal, day):
-    '''
-    Purpose:
-        For data from the CRCNS hc-6 dataset. Returns which epochs in a given day
-        that the animal was in the Sleep Box, W-track A, or W-track B.
-    Arguments:
-        animal: the animal to look at
-        day: the day to look at
-    Returns:
-        sleep_epochs (list): list of epoch numbers where the animal was in the sleep box
-        wtrackA_epochs (list): list of epoch numbers where the animal was on W-track A
-        wtrackB_epochs (list): list of epoch numbers where the animal was on W-track B
+    '''For data from the CRCNS hc-6 dataset. Returns which epochs in a given\
+    day that the animal was in the Sleep Box, W-track A, or W-track B.
+
+    Parameters
+    ---------
+    data_dir : str
+    animal: str
+    day: int
+
+    Returns
+    -------
+    sleep_epochs : list
+        Epochs where the animal was in the sleep box
+    wtrackA_epochs : list
+        Epochs where the animal was on W-track A
+    wtrackB_epochs : list
+        Epochs where the animal was on W-track B
+
     '''
 
     sleep_epochs, wtrackA_epochs, wtrackB_epochs = [], [], []
@@ -199,17 +209,20 @@ def separate_epochs_by_apparatus(data_dir, animal, day):
 
 
 def coords_intersect(n1, n2, tol=0.01):
-    '''
-    Purpose:
-        Returns True if the input points are equivalent.
+    '''Returns True if the input points are equivalent.
 
-    Arguments:
-        n1 (1x2 list): [x, y] coordinate of the first point
-        n2 (1x2 list): [x, y] coordinate of the second point
-        tol (float): tolerance within which to consider floating-point values equal
+    Parameters
+    ----------
+    n1 : list of lists, shape (1, 2)
+    n2 : list of lists, shape (1, 2)
+    tol : float
+        Tolerance within which to consider floating-point values equal
 
-    Returns:
-        True if and only if n1 == n2 within some tolerance. False otherwise.
+    Returns
+    -------
+    is_intersect : bool
+        True if n1 == n2 within some tolerance.
+
     '''
     for c1 in n1.coords:
         for c2 in n2.coords:
@@ -219,14 +232,18 @@ def coords_intersect(n1, n2, tol=0.01):
 
 
 def find_edges(node_list):
-    '''
-    Purpose:
-        Find pairs of Frank Lab nodes that share at least one x/y coordinate.
-    Arguments:
-        node_list (1 x n list): list of objects inheriting from Frank Lab Node
-    Returns:
-        ret_edges (1 x m list): list of Frank Lab Edge objects, each of which contains the
-            names of two Nodes that share at least one coordinate
+    '''Find pairs of Frank Lab nodes that share at least one xy coordinate.
+
+    Parameters
+    ----------
+    node_list : list of lists, shape (1, n)
+        List of objects inheriting from Frank Lab Node
+
+    Returns
+    -------
+    ret_edges : list of lists, shape (1, m)
+        List of Frank Lab Edge objects, each of which contains the
+        names of two Nodes that share at least one coordinate
     '''
     edges = []
     for n1 in node_list:
