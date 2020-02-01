@@ -5,6 +5,8 @@ import os
 from datetime import datetime
 from logging import getLogger
 
+# Frank Lab PyNWB extensions and extension-related helpers
+import franklab_nwb_extensions.fl_extension as fle
 import numpy as np
 import pynwb
 import scipy.interpolate as interpolate
@@ -13,8 +15,6 @@ from dateutil import tz
 import filterframework_to_nwb.fl_extension_helpers as flh
 # # Helpers for parsing Frank Lab Matlab data
 import filterframework_to_nwb.nspike_helpers as ns
-# Frank Lab PyNWB extensions and extension-related helpers
-import franklab_nwb_extensions.fl_extension as fle
 
 # Recording parameters needed for import:
 LFP_SAMPLING_RATE = 1500.0  # Hz
@@ -569,5 +569,5 @@ def convert_to_nwb(data_dir, nwb_dir, animal_prefix, animal_name, days,
         write_behavior(nwbf, data_dir, animal_prefix, day)
 
         with pynwb.NWBHDF5IO(nwb_file_name, mode='w') as iow:
-            iow.write(nwbf)
+            iow.write(nwbf, cache_spec=True)
         logger.info(f'Successfully wrote NWB file {nwb_file_name}\n')
