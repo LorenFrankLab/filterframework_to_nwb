@@ -124,3 +124,4 @@ dmypy.json
 
 *.mat
 *.nwb
+.DS_Store
