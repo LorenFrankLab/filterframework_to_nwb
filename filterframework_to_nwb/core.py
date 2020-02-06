@@ -1,6 +1,7 @@
 
 # General dependencies
 import os
+import uuid
 # Time
 from datetime import datetime
 from logging import getLogger
@@ -539,7 +540,7 @@ def convert_to_nwb(data_dir, nwb_dir, animal_prefix, animal_name, days,
         # open the file
         nwbf = pynwb.NWBFile(
             session_description=session_description,
-            identifier=f'{animal_prefix}{day:04}',
+            identifier=uuid.uuid1(),
             session_start_time=dataset_zero_time,
             file_create_date=datetime.now(tz.tzlocal()),
             lab='Frank Laboratory',
