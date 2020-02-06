@@ -183,7 +183,7 @@ def write_ephys(nwbf, data_dir, animal_prefix, day, recording_device):
 
     # Add LFP as a new ElectricalSeries in the ecephys.LFP object
     lfp.create_electrical_series(name=lfp_name,
-                                 data=final_data,
+                                 data=final_data.T,
                                  conversion=MICROVOLTS_TO_VOLTS,
                                  electrodes=lfp_electrode_table_region,
                                  timestamps=final_times)
@@ -568,6 +568,6 @@ def convert_to_nwb(data_dir, nwb_dir, animal_prefix, animal_name, days,
         # Behavioral data
         write_behavior(nwbf, data_dir, animal_prefix, day)
 
-        with pynwb.NWBHDF5IO(nwb_file_name, mode='w') as iow:
-            iow.write(nwbf, cache_spec=True)
+        with pynwb.NWBHDF5IO(nwb_file_name, mode='w') as io:
+            io.write(nwbf, cache_spec=True)
         logger.info(f'Successfully wrote NWB file {nwb_file_name}\n')
