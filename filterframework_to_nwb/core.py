@@ -547,7 +547,7 @@ def convert_to_nwb(data_dir, nwb_dir, animal_prefix, animal_name, days,
             experimenter=experimenter,
             institution='UCSF',
             experiment_description=experiment_description,
-            session_id='{0}{1:04}'.format(animal_prefix, day))
+            session_id=f'{animal_prefix}_{day:03}')
 
         # write out the subject information
         # change when NWB date_of_birth bug fixed
