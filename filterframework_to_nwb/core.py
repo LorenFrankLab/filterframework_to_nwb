@@ -260,7 +260,7 @@ def write_behavior(nwbf, data_dir, animal_prefix, day):
     # information
 
     position = pynwb.behavior.Position(name='Position')
-    head_dir = pynwb.behavior.CompassDirection(name='Head Direction')
+    head_dir = pynwb.behavior.BehavioralTimeSeries(name='Head Direction')
     speed = pynwb.behavior.BehavioralTimeSeries(name='Speed')
     linpos = pynwb.behavior.BehavioralTimeSeries(name='Linearized Position')
 
