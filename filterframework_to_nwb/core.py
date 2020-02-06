@@ -200,8 +200,8 @@ def write_ephys(nwbf, data_dir, animal_prefix, day, recording_device):
     # Add some metadata columns to the NWBFile.units table
     # ------------
     nwbf.add_unit_column(
-        'cluster_name', 'cluster name from clustering software')
-    nwbf.add_unit_column('sorting_metric', 'a sorting metric for this unit')
+        'cluster_name', 'MatClust')
+    nwbf.add_unit_column('sorting_metric', 'peak amplitude and spike width')
 
     # ------------
     # Load spiking data into a dictionary ordered by
