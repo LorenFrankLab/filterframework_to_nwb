@@ -533,7 +533,7 @@ def convert_to_nwb(data_dir, nwb_dir, animal_prefix, animal_name, days,
     for day in days:
         # process the data for each day
         nwb_file_name = os.path.join(
-            nwb_dir, f'{animal_prefix.lower()}_{day:02d}.nwb')
+            nwb_dir, f'{animal_prefix.lower()}_{day:03d}.nwb')
 
         logger.info(f'Converting {animal_name} day {day}')
 
