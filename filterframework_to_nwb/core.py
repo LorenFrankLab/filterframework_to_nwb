@@ -355,12 +355,12 @@ def write_behavior(nwbf, data_dir, animal_prefix, day):
                                    data=pos_samples,
                                    reference_frame='corner of video frame')
 
-    head_dir.create_spatial_series(
+    head_dir.create_timeseries(
         name='Head direction',
         timestamps=behavior_timestamps,
         data=dir_samples,
-        reference_frame=('0=direction of top of video frame; '
-                         'positive values clockwise (need to confirm this)'))
+        description=('0=direction of top of video frame; '
+                     'positive values clockwise (need to confirm this)'))
 
     speed.create_timeseries(name='Speed',
                             timestamps=behavior_timestamps,
