@@ -350,7 +350,7 @@ def write_behavior(nwbf, data_dir, animal_prefix, day):
     # Add the across-epochs behavioral data to the PyNWB objects
     # See place_field_with_queries.ipynb for examples of how we query these for
     # specific epochs
-    position.create_spatial_series(name='Position',
+    position.create_spatial_series(name='Head Position',
                                    timestamps=behavior_timestamps,
                                    data=pos_samples,
                                    reference_frame='corner of video frame')
