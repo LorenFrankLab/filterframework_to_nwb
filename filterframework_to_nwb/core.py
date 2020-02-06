@@ -357,8 +357,9 @@ def write_behavior(nwbf, data_dir, animal_prefix, day):
                                    reference_frame='corner of video frame')
 
     head_dir.create_timeseries(
-        name='Head direction',
+        name='Head Direction',
         timestamps=behavior_timestamps,
+        units='radians'
         data=dir_samples,
         description=('0=direction of top of video frame; '
                      'positive values clockwise (need to confirm this)'))
