@@ -335,12 +335,9 @@ def write_behavior(nwbf, data_dir, animal_prefix, day):
             # for each field in the statematrix we create a separate timeseries
             # object, and here we first concatenate the data. There is probably
             # a better way to do this.
-            for key in list(statematrix.keys()):
+            for key in statematrix:
                 if key not in statematrix_dict:
                     statematrix_dict[key] = statematrix[key]
-                else:
-                    np.concatenate(
-                        (statematrix_dict[key], statematrix[key]), axis=0)
 
     # adjust the statematrix timestamps
     if linpos_found:
@@ -541,7 +538,7 @@ def convert_to_nwb(data_dir, nwb_dir, animal_prefix, animal_name, days,
         # open the file
         nwbf = pynwb.NWBFile(
             session_description=session_description,
-            identifier=uuid.uuid1(),
+            identifier=str(uuid.uuid1()),
             session_start_time=dataset_zero_time,
             file_create_date=datetime.now(tz.tzlocal()),
             lab='Loren Frank Laboratory',
